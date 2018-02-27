@@ -3,6 +3,7 @@ import { NavController } from 'ionic-angular';
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
 import { AddDataPage } from '../add-data/add-data';
 import { EditDataPage } from '../edit-data/edit-data';
+import { RestProvider } from '../../providers/rest/rest';
 
 @Component({
   selector: 'page-home',
@@ -10,53 +11,50 @@ import { EditDataPage } from '../edit-data/edit-data';
 })
 export class HomePage {
 
-  expenses: any = [];
-  totalIncome = 0;
+  users: any;
+  userses: any [];
+  totalcount = 0;
   totalExpense = 0;
-  balance = 0;
 
   constructor(public navCtrl: NavController,
-    private sqlite: SQLite) {}
+    private sqlite: SQLite, public restProvider: RestProvider) {
+
+    }
 
   ionViewDidLoad() {
     this.getData();
+    this.getUsers();
   }
 
   ionViewWillEnter() {
     this.getData();
   }
-
+  getUsers() {
+    this.restProvider.getUsers()
+      .then(data => {
+        this.users = data;
+        console.log(this.users);
+      });
+  }
   getData() {
     this.sqlite.create({
       name: 'ionicdb.db',
       location: 'default'
     }).then((db: SQLiteObject) => {
-      db.executeSql('CREATE TABLE IF NOT EXISTS expense(rowid INTEGER PRIMARY KEY, date TEXT, type TEXT, description TEXT, amount INT)', {})
-      .then(res => console.log('Executed SQL'))
-      .catch(e => console.log(e));
-      db.executeSql('SELECT * FROM expense ORDER BY rowid DESC', {})
+      db.executeSql('SELECT * FROM users ORDER BY rowid DESC', {})
       .then(res => {
-        this.expenses = [];
+        this.userses = [];
         for(var i=0; i<res.rows.length; i++) {
-          this.expenses.push({rowid:res.rows.item(i).rowid,date:res.rows.item(i).date,type:res.rows.item(i).type,description:res.rows.item(i).description,amount:res.rows.item(i).amount})
+          this.userses.push({ id: res.rows.item(i).id, name: res.rows.item(i).name, email: res.rows.item(i).email, logincount: res.rows.item(i).logincount})
         }
       })
       .catch(e => console.log(e));
-      db.executeSql('SELECT SUM(amount) AS totalIncome FROM expense WHERE type="Income"', {})
+      db.executeSql('SELECT COUNT(*) AS totalcount FROM users WHERE logincount=0', {})
       .then(res => {
         if(res.rows.length>0) {
-          this.totalIncome = parseInt(res.rows.item(0).totalIncome);
-          this.balance = this.totalIncome-this.totalExpense;
+          this.totalcount = parseInt(res.rows.item(0).totalcount);
         }
-      })
-      .catch(e => console.log(e));
-      db.executeSql('SELECT SUM(amount) AS totalExpense FROM expense WHERE type="Expense"', {})
-      .then(res => {
-        if(res.rows.length>0) {
-          this.totalExpense = parseInt(res.rows.item(0).totalExpense);
-          this.balance = this.totalIncome-this.totalExpense;
-        }
-      })
+      }).catch(e => console.log(e));
     }).catch(e => console.log(e));
   }
 
@@ -75,7 +73,7 @@ export class HomePage {
       name: 'ionicdb.db',
       location: 'default'
     }).then((db: SQLiteObject) => {
-      db.executeSql('DELETE FROM expense WHERE rowid=?', [rowid])
+      db.executeSql('DELETE FROM users WHERE id=?', [rowid])
       .then(res => {
         console.log(res);
         this.getData();

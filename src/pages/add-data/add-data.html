@@ -6,35 +6,198 @@
 -->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>My Expense</ion-title>
-  </ion-navbar>
+    <ion-navbar color="primary">
+        <ion-title>Data Collection</ion-title>
+    </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
-  <h2>Add Data</h2>
-  <form (ngSubmit)="saveData()">
+    <h2></h2>
+    <ion-item-divider color="light">Socio-Demographic Characteristics</ion-item-divider>
     <ion-item>
-      <ion-label>Date</ion-label>
-      <ion-datetime displayFormat="MM/DD/YYYY" [(ngModel)]="data.date" name="date" required=""></ion-datetime>
+        <ion-label stacked>Name</ion-label>
+        <ion-input type="text" [(ngModel)]="user.name" name="name"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-label>Type</ion-label>
-      <ion-select [(ngModel)]="data.type" name="type" required="">
-        <ion-option value="Income">Income</ion-option>
-        <ion-option value="Expense">Expense</ion-option>
-      </ion-select>
+        <ion-label stacked>Age</ion-label>
+        <ion-input type="text" [(ngModel)]="user.age" name="age"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-label>Description</ion-label>
-      <ion-input type="text" placeholder="Description" [(ngModel)]="data.description" name="description" required="" ></ion-input>
+        <ion-label stacked>Address</ion-label>
+        <ion-input type="email" [(ngModel)]="user.address" name="address"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-label>Amount</ion-label>
-      <ion-input type="number" placeholder="Amount" [(ngModel)]="data.amount" name="amount" required="" ></ion-input>
+        <ion-label stacked>Descriptive Landmark</ion-label>
+        <ion-input type="url" [(ngModel)]="user.landmark" name="landmark"></ion-input>
     </ion-item>
-    <button ion-button type="submit" block>Save Data</button>
-  </form>
+    <ion-item>
+        <ion-label stacked>Phone</ion-label>
+        <ion-input type="text" [(ngModel)]="user.phone" name="phone"></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label stacked>Marital Status</ion-label>
+        <ion-input type="text" [(ngModel)]="user.m_status" name="m_status"></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label stacked>If married name of husband</ion-label>
+        <ion-input type="text" [(ngModel)]="user.husband_name" name="husband_name"></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label stacked>Religion</ion-label>
+        <ion-input type="text" [(ngModel)]="user.religion" name="religion"></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label stacked>Please Specify Denomination</ion-label>
+        <ion-input type="text" [(ngModel)]="user.religion_denimination" name="religion_denimination"></ion-input>
+    </ion-item>
+    <ion-item-divider color="light">Antenantal Care and Delivery</ion-item-divider>
+    <ion-item>
+        <ion-label stacked>When was your last menstral period</ion-label>
+        <ion-input type="text" [(ngModel)]="user.menstral_period" name="menstral_period"></ion-input>
+    </ion-item>
+    <ion-list>
+        <ion-item>
+            <ion-label>Is this your first pregnancy</ion-label>
+            <ion-select [(ngModel)]="user.first_pregnancy">
+                <ion-option value="Yes">Yes</ion-option>
+                <ion-option value="No">No</ion-option>
+            </ion-select>
+        </ion-item>
+    </ion-list>
+    <ion-label fixed>If No</ion-label>
+    <ion-item>
+        <ion-label stacked>how old is your last Child</ion-label>
+        <ion-input type="text" [(ngModel)]="user.last_child_age" name="last_child_age"></ion-input>
+    </ion-item>
+    <ion-list>
+        <ion-item>
+            <ion-label stacked>Did you attend attenatal clinic during your last pregnancy</ion-label>
+            <ion-select [(ngModel)]="user.attenatal_during_last_pregnancy">
+                <ion-option value="Yes">Yes</ion-option>
+                <ion-option value="No">No</ion-option>
+            </ion-select>
+        </ion-item>
+    </ion-list>
+    <ion-item>
+        <ion-label stacked>Where did you deliver your last child</ion-label>
+        <ion-input type="text" [(ngModel)]="user.last_child_dlvry_location" name="last_child_dlvry_location"></ion-input>
+    </ion-item>
+    <ion-list>
+        <ion-item>
+            <ion-label stacked>have you register for antenantal care service for this pregnancy</ion-label>
+            <ion-select [(ngModel)]="user.attenatal_reg_for_pregnancy">
+                <ion-option value="Yes">Yes</ion-option>
+                <ion-option value="No">No</ion-option>
+            </ion-select>
+        </ion-item>
+    </ion-list>
+    <ion-label fixed>If Yes</ion-label>
+    <ion-item>
+        <ion-label stacked>What facility</ion-label>
+        <ion-input type="text" [(ngModel)]="user.antenantal_reg_facility" name="antenantal_reg_facility"></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label stacked>When is your next schedule</ion-label>
+        <ion-input type="text" [(ngModel)]="user.antenantal_reg_next_schedule" name="antenantal_reg_next_schedule"></ion-input>
+    </ion-item>
+    <ion-label fixed>If No</ion-label>
+    <ion-item>
+        <ion-label stacked>Why</ion-label>
+        <ion-input type="text" [(ngModel)]="user.antenantal_reg_why" name="antenantal_reg_why"></ion-input>
+    </ion-item>
+    <ion-item-divider color="light">Family Planning</ion-item-divider>
+    <ion-list>
+        <ion-item>
+            <ion-label stacked>Have you used any form of family planning before</ion-label>
+            <ion-select [(ngModel)]="user.fam_form_before">
+                <ion-option value="Yes">Yes</ion-option>
+                <ion-option value="No">No</ion-option>
+            </ion-select>
+        </ion-item>
+    </ion-list>
+    <ion-item-divider color="light">Immunization Tracker Form</ion-item-divider>
+    <h3>Post-natal Care</h3>
+    <ion-item>
+        <ion-label stacked>On what date did you have your baby</ion-label>
+        <ion-datetime displayFormat="MM/DD/YYYY" [(ngModel)]="user.baby_birthday" name="date" required=""></ion-datetime>
+    </ion-item>
+    <ion-item>
+        <ion-label stacked>Where did you have your baby</ion-label>
+        <ion-input type="text" [(ngModel)]="user.baby_delivery_loctn" name="bs"></ion-input>
+    </ion-item>
+    <ion-list>
+        <ion-item>
+            <ion-label stacked>Have you gone for any post-natal care check up after deliver</ion-label>
+            <ion-select [(ngModel)]="user.baby_post_natal_checkup">
+                <ion-option value="Yes">Yes</ion-option>
+                <ion-option value="No">No</ion-option>
+            </ion-select>
+        </ion-item>
+    </ion-list>
+    <h3>Birth Registration</h3>
+    <ion-list>
+        <ion-item>
+            <ion-label stacked>Was your baby birth registered</ion-label>
+            <ion-select [(ngModel)]="user.baby_birth_reg">
+                <ion-option value="Yes">Yes</ion-option>
+                <ion-option value="No">No</ion-option>
+            </ion-select>
+        </ion-item>
+    </ion-list>
+    <ion-label fixed>If Yes</ion-label>
+    <ion-list>
+        <ion-item>
+            <ion-label stacked>Do you have the birth certificate</ion-label>
+            <ion-select [(ngModel)]="user.baby_birth_cert">
+                <ion-option value="Yes">Yes</ion-option>
+                <ion-option value="No">No</ion-option>
+            </ion-select>
+        </ion-item>
+    </ion-list>
+    <h3>Routine Immunization Schedule</h3>
+    <ion-list>
+        <ion-item>
+            <ion-label stacked>Have your baby received any form of immunization since birth</ion-label>
+            <ion-select [(ngModel)]="user.baby_immunization_since_birth">
+                <ion-option value="Yes">Yes</ion-option>
+                <ion-option value="No">No</ion-option>
+            </ion-select>
+        </ion-item>
+    </ion-list>
+    <ion-label fixed>If Yes</ion-label>
+    <ion-item>
+        <ion-label stacked>When</ion-label>
+        <ion-datetime displayFormat="YYYY/MM/DD h:mm A" [(ngModel)]="user.baby_birth_reg_day" name="date" required=""></ion-datetime>
+    </ion-item>
+    <ion-list>
+        <ion-item>
+            <ion-label stacked>Does your baby have an immunization card available for inspection</ion-label>
+            <ion-select [(ngModel)]="user.baby_birth_cert">
+                <ion-option value="Yes">Yes</ion-option>
+                <ion-option value="No">No</ion-option>
+            </ion-select>
+        </ion-item>
+    </ion-list>
+    <ion-item>
+        <ion-label stacked>When is your baby next immunization scheduled</ion-label>
+        <ion-datetime displayFormat="YYYY/MM/DD" [(ngModel)]="user.baby_next_immun_schedule_date" name="date" required=""></ion-datetime>
+    </ion-item>
+    <h3>Vitamin A Supplement</h3>
+    <ion-list>
+        <ion-item>
+            <ion-label stacked>Has your baby received vitamin A supplement since birth</ion-label>
+            <ion-select [(ngModel)]="user.baby_birth_cert">
+                <ion-option value="Yes">Yes</ion-option>
+                <ion-option value="No">No</ion-option>
+            </ion-select>
+        </ion-item>
+    </ion-list>
+    <button ion-button (click)="saveUser()" block>Add Data</button>
 </ion-content>
+<ion-footer>
+    <ion-toolbar color="primary">
+        <ion-title>&copy; Corona Management System</ion-title>
+    </ion-toolbar>
+</ion-footer>

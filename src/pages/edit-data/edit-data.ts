@@ -24,7 +24,7 @@ export class EditDataPage {
       name: 'ionicdb.db',
       location: 'default'
     }).then((db: SQLiteObject) => {
-      db.executeSql('SELECT * FROM expense WHERE rowid=?', [rowid])
+      db.executeSql('SELECT * FROM records WHERE rowid=?', [rowid])
         .then(res => {
           if(res.rows.length > 0) {
             this.data.rowid = res.rows.item(0).rowid;
@@ -57,7 +57,7 @@ export class EditDataPage {
       name: 'ionicdb.db',
       location: 'default'
     }).then((db: SQLiteObject) => {
-      db.executeSql('UPDATE expense SET date=?,type=?,description=?,amount=? WHERE rowid=?',[this.data.date,this.data.type,this.data.description,this.data.amount,this.data.rowid])
+      db.executeSql('UPDATE records SET date=?,type=?,description=?,amount=? WHERE rowid=?',[this.data.date,this.data.type,this.data.description,this.data.amount,this.data.rowid])
         .then(res => {
           console.log(res);
           this.toast.show('Data updated', '5000', 'center').subscribe(
