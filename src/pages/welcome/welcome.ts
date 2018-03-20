@@ -73,7 +73,7 @@ export class WelcomePage {
                       .then(res => {                        
                         console.log(res);
                     }).catch(e => {
-                        this.showPopup("Error", e);
+                        //this.showPopup("Error", e);
                         console.log(e);
                     });
                   }
@@ -93,10 +93,6 @@ export class WelcomePage {
       buttons: [
         {
           text: 'OK',
-          // handler: data => {
-          //   if (this.createSuccess) {
-          //   }
-          // }
         }
       ]
     });

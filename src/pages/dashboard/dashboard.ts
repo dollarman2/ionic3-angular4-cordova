@@ -27,7 +27,7 @@ export class DashboardPage {
   constructor(public navCtrl: NavController, private auth: AuthService,
   public navParams: NavParams, public restProvider: RestProvider) {
     this.restProvider.getData();
-    this.restProvider.filterData(this.msg); 
+    //this.restProvider.filterData(this.msg); 
     let info = this.auth.getUserInfo();
     this.username = info['name'];
     this.email = info['email'];   
