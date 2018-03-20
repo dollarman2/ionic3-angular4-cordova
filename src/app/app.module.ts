@@ -13,23 +13,27 @@ import { RegisterPage } from '../pages/register/register';
 import { AddDataPage } from '../pages/add-data/add-data';
 import { EditDataPage } from '../pages/edit-data/edit-data';
 import { DatabaseProvider } from '../providers/database/database';
+import { SplashPage } from '../pages/splash/splash';
+import { DashboardPage } from '../pages/dashboard/dashboard';
+import { LoginPage } from '../pages/login/login';
+import { FacilitiesPage } from '../pages/facilities/facilities';
+// import { AngularFireDatabaseModule, AngularFireDatabase } from 'angularfire2/database-deprecated';
 
-import { AngularFireDatabaseModule, AngularFireDatabase } from 'angularfire2/database-deprecated';
-
-import { AngularFireModule } from 'angularfire2';
-import { AngularFireAuthModule } from 'angularfire2/auth';
+// import { AngularFireModule } from 'angularfire2';
+// import { AngularFireAuthModule } from 'angularfire2/auth';
 import { Network } from '@ionic-native/network';
 import { HTTP } from '@ionic-native/http';
 import { RestProvider } from '../providers/rest/rest';
+import { AuthService } from '../providers/auth-service/auth-service';
 
-const firebaseAuth = {
-  apiKey: "AIzaSyCMoTV4O8NcBF2l28600uCDTwzUEauooHs",
-  authDomain: "mobile-app-63dba.firebaseapp.com",
-  databaseURL: "https://mobile-app-63dba.firebaseio.com",
-  projectId: "mobile-app-63dba",
-  storageBucket: "mobile-app-63dba.appspot.com",
-  messagingSenderId: "551920707288"
-};
+// const firebaseAuth = {
+//   apiKey: "AIzaSyCMoTV4O8NcBF2l28600uCDTwzUEauooHs",
+//   authDomain: "mobile-app-63dba.firebaseapp.com",
+//   databaseURL: "https://mobile-app-63dba.firebaseio.com",
+//   projectId: "mobile-app-63dba",
+//   storageBucket: "mobile-app-63dba.appspot.com",
+//   messagingSenderId: "551920707288"
+// };
 @NgModule({
   declarations: [
     MyApp,
@@ -37,15 +41,19 @@ const firebaseAuth = {
     WelcomePage,
     AddDataPage,
     EditDataPage,
-    RegisterPage
+    RegisterPage,
+    SplashPage,
+    DashboardPage,
+    FacilitiesPage,
+    LoginPage
   ],
   imports: [
     BrowserModule,
     HttpModule,
     IonicModule.forRoot(MyApp),
-    AngularFireModule.initializeApp(firebaseAuth),
-    AngularFireAuthModule, 
-    AngularFireDatabaseModule
+    // AngularFireModule.initializeApp(firebaseAuth),
+    // AngularFireAuthModule, 
+    // AngularFireDatabaseModule
     
   ],
   bootstrap: [IonicApp],
@@ -55,7 +63,11 @@ const firebaseAuth = {
     WelcomePage,
     AddDataPage,
     EditDataPage,
-    RegisterPage
+    RegisterPage,
+    SplashPage,
+    DashboardPage,
+    FacilitiesPage,
+    LoginPage
   ],
   providers: [
     StatusBar,
@@ -65,7 +77,8 @@ const firebaseAuth = {
     SQLite,
     Toast,
     Network,
-    AngularFireDatabase,
+    AuthService,
+    // AngularFireDatabase,
     DatabaseProvider,
     RestProvider
   ]

@@ -1,10 +1,10 @@
 <ion-header>
-    <ion-navbar>
+    <ion-navbar color="main">
         <ion-title>
-            My Data
+            Collected Data
         </ion-title>
         <ion-buttons end>
-            <button ion-button icon-only (click)="addData()">
+            <button class="submain" ion-button icon-only (click)="addData()">
         <ion-icon name="add-circle"></ion-icon>
       </button>
         </ion-buttons>
@@ -12,36 +12,40 @@
 </ion-header>
 
 <ion-content padding>
+    <ion-searchbar [(ngModel)]="searchTerm" (ionInput)="onSearchInput()" [formControl]="searchControl"></ion-searchbar>
+    <div *ngIf="searching" class="spinner-container">
+        <ion-spinner></ion-spinner>
+    </div>
     <h2>Data List</h2>
     <ion-list>
-        <ion-item-sliding *ngFor="let user of userses; let i=index">
+        <ion-item-sliding *ngFor="let user of userses">
             <ion-item nopadding>
                 <p>
-                    <span>{{user.name}}</span><br> email: {{user.email}}<br>
+                    <strong>Name:</strong> &nbsp;<span>{{user.name}}</span>
+                    <br><strong>Phone:</strong> &nbsp; {{ user.phone }}
                 </p>
-                <h3 item-end>
-                    LoginCount: {{user.logincount}}
-                </h3>
             </ion-item>
             <ion-item-options side="right">
-                <button ion-button color="primary" (click)="editData(user.id)">
+                <button ion-button color="primary" (click)="editData(user.rowid)">
                     <ion-icon name="paper"></ion-icon>
                 </button>
-                <button ion-button color="danger" (click)="deleteData(user.id)">
+                <button ion-button color="danger" (click)="deleteData(user.rowid)">
+                    <ion-icon name="trash"></ion-icon>
+                </button>
+            </ion-item-options>
+            <ion-item-options side="left">
+                <button ion-button color="primary" (click)="editData(user.rowid)">
+                    <ion-icon name="paper"></ion-icon>
+                </button>
+                <button ion-button color="danger" (click)="deleteData(user.rowid)">
                     <ion-icon name="trash"></ion-icon>
                 </button>
             </ion-item-options>
         </ion-item-sliding>
     </ion-list>
-    <ion-list inset>
-        <ion-item *ngFor="let user of users">
-            <h2>{{user.name}}</h2>
-            <p>{{user.email}}</p>
-        </ion-item>
-    </ion-list>
 </ion-content>
 <ion-footer>
-    <ion-toolbar>
-        <ion-title>Total Users: {{totalcount}}</ion-title>
+    <ion-toolbar color="main">
+        <ion-title>Total Records: {{totalcount}}</ion-title>
     </ion-toolbar>
 </ion-footer>

@@ -1,0 +1,37 @@
+<!--
+  Generated template for the DashboardPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+    <ion-navbar color="main">
+        <ion-title>Dashboard</ion-title>
+    </ion-navbar>
+</ion-header>
+<ion-content padding scroll="false">
+    <h3>Welcome inside, {{username}}!</h3>
+    Your Email is: {{email}}
+    <div class="block">
+        <button color="success" ion-button (click)="addData()" block>Add Data</button>
+    </div>
+    <div class="block">
+        <button color="primary" ion-button (click)="viewData()" block>View Data</button>
+    </div>
+    <div class="block">
+        <button color="warning" ion-button (click)="facilitiesData()" block>NearBy Facilities</button>
+    </div>
+    <div class="block">
+        <button color="submain" ion-button (click)="Change()" block>Change Password</button>
+    </div>
+    <div class="block">
+        <button color="danger" ion-button (click)="logout()" block>
+            <ion-icon name="log-out"></ion-icon>Logout
+        </button>
+    </div>
+</ion-content>
+<ion-footer>
+    <ion-toolbar color="main">
+        <ion-title>&copy; Corona Management Systems</ion-title>
+    </ion-toolbar>
+</ion-footer>

@@ -4,38 +4,42 @@
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
 -->
-<ion-header>
-
-    <ion-navbar color="primary">
-        <ion-title>Welcome</ion-title>
-    </ion-navbar>
-
-</ion-header>
 
 
-<ion-content padding>
-    <ion-list>
 
-        <ion-item>
-            <ion-label stacked>Username</ion-label>
-            <ion-input type="text" #username></ion-input>
-        </ion-item>
+<ion-content class="login-content" padding>
+    <ion-row class="logo-row">
+        <ion-col></ion-col>
+        <ion-col width-67>
+            <ion-img class="img" src="assets/cor.png"></ion-img>
+        </ion-col>
+        <ion-col></ion-col>
+    </ion-row>
+    <div class="login-box">
+        <ion-list inset>
 
-        <ion-item>
-            <ion-label stacked>Password</ion-label>
-            <ion-input type="password" #password></ion-input>
-        </ion-item>
+            <ion-item>
+                <ion-label stacked>Email</ion-label>
+                <ion-input type="text" name="email" [(ngModel)]="registerCredentials.email"></ion-input>
+            </ion-item>
 
-    </ion-list>
-    <div padding>
-        <button block ion-button (click)="signInUser()">Sign In</button>
+            <ion-item>
+                <ion-label stacked>Password</ion-label>
+                <ion-input type="password" name="password" [(ngModel)]="registerCredentials.password"></ion-input>
+            </ion-item>
+
+        </ion-list>
+        <ion-row>
+            <ion-col class="signup-col">
+                <button ion-button class="submit-btn" full (click)="signInUser()">Login</button>
+            </ion-col>
+        </ion-row>
+
     </div>
-    <button block ion-button (click)="Register()" icon-left>
+    <!--button color="nav" block ion-button (click)="Register()" icon-left>
   		<ion-icon name="home"></ion-icon>Register
-  	</button>
+  	</button
+      <div padding>
+            <button color="submain" block ion-button>Sign In</button>
+        </div>-->
 </ion-content>
-<ion-footer>
-    <ion-toolbar color="primary">
-        <ion-title>&copy; Corona Management System</ion-title>
-    </ion-toolbar>
-</ion-footer>

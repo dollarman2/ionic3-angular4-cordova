@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
-import { AlertController, IonicPage, NavController, NavParams } from 'ionic-angular';
-import { AngularFireAuth } from 'angularfire2/auth';
-import { LoginPage } from '../login/login';
+import { AlertController, IonicPage, NavController, NavParams,ToastController } from 'ionic-angular';
+// import { AngularFireAuth } from 'angularfire2/auth';
+// import { LoginPage } from '../login/login';
 import { Toast } from '@ionic-native/toast';
-import { HomePage } from '../home/home';
+import { DashboardPage } from '../dashboard/dashboard';
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
+import { Network } from '@ionic-native/network';
+import { Subscription } from 'rxjs/Subscription';
 /**
  * Generated class for the RegisterPage page.
  *
@@ -20,12 +22,11 @@ import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
 export class RegisterPage {
    users = [];
    user = {};
-  // @ViewChild('username') uname;
-  // @ViewChild('email') email;
- 	// @ViewChild('password') pword;
-
-  constructor(private fire: AngularFireAuth, public navCtrl: NavController, 
-    public navParams: NavParams, public alertCtrl: AlertController, private sqlite: SQLite, private toast: Toast) {
+   connected: Subscription;
+   disconnected: Subscription;
+  constructor( public navCtrl: NavController, 
+    public navParams: NavParams, public alertCtrl: AlertController, private sqlite: SQLite, 
+    private toast: Toast, private toasts: ToastController, private network: Network) {
     
   }
   alert(message: string,title : string){
@@ -35,7 +36,7 @@ export class RegisterPage {
       buttons: ['OK']
     }).present();
   }
-  saveData() {85  
+  saveData() {  
     this.sqlite.create({
       name: 'ionicdb.db',
       location: 'default'
@@ -45,7 +46,7 @@ export class RegisterPage {
           console.log(res);
           this.toast.show('Data saved', '5000', 'center').subscribe(
             toast => {
-              this.navCtrl.setRoot(HomePage);
+              this.navCtrl.setRoot(DashboardPage);
             }
           );
         })
@@ -66,21 +67,44 @@ export class RegisterPage {
       );
     });
   }
+
   RegisterUser(){
-    this.fire.auth.createUserWithEmailAndPassword(this.user['email'], this.user['password'])
-  		.then(data =>{
-        this.saveData();
-  			console.log('got data',data);
-  			this.alert(data.message,'Registration Successful!');
-  			this.navCtrl.push(LoginPage);
-  		}).catch(error =>{
-  			console.log('got data',error);
-  			this.alert(error.message,'Error!');
-  		});
+    this.saveData();
   }
 
+  displayNetworkUpdate(connectionState: string) {
+    let networkType = this.network.type;
+    this.toasts.create({
+      message: `You are now ${connectionState} via ${networkType}`,
+      duration: 3000
+    }).present();
+  }
   ionViewDidLoad() {
-    console.log('ionViewDidLoad RegisterPage');
+    this.connected = this.network.onConnect().subscribe(data => {
+      console.log(data)
+      this.displayNetworkUpdate(data.type);
+    }, error => console.error(error));
+
+    this.disconnected = this.network.onDisconnect().subscribe(data => {
+      console.log(data)
+      this.displayNetworkUpdate(data.type);
+    }, error => console.error(error));
+  }
+
+  ionViewWillEnter() {
+    this.connected = this.network.onConnect().subscribe(data => {
+      console.log(data)
+      this.displayNetworkUpdate(data.type);
+    }, error => console.error(error));
+
+    this.disconnected = this.network.onDisconnect().subscribe(data => {
+      console.log(data)
+      this.displayNetworkUpdate(data.type);
+    }, error => console.error(error));
+  }
+  ionViewWillLeave() {
+    this.connected.unsubscribe();
+    this.disconnected.unsubscribe();
   }
 
 }
