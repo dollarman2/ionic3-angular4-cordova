@@ -5,24 +5,26 @@ import { Toast } from '@ionic-native/toast';
 import { Network } from '@ionic-native/network';
 import { Subscription } from 'rxjs/Subscription';
 import { RestProvider } from '../../providers/rest/rest';
+import { AuthService } from '../../providers/auth-service/auth-service';
 @IonicPage()
 @Component({
   selector: 'page-add-data',
   templateUrl: 'add-data.html',
 })
 export class AddDataPage {
-
+  user_id = '';
   items: any;
   connected: Subscription; 
   msg: string = '';
   disconnected: Subscription;
-  user = { name: '', age: '', address: '', landmark: '', phone: '', m_status: '', husband_name: '', husband_phone: '', religion : '', religion_denomination : '', menstral_period : '', first_pregnancy : '', last_child_age : '', antenatal_during_last_pregnancy : '', last_child_dlvry_location : '', antenatal_reg_for_pregnancy : '', antenatal_reg_facility : '', antenatal_reg_next_schedule : '', antenatal_reg_why : '', fam_form_before : '', baby_birthday : '', baby_delivery_loctn : '', baby_post_natal_checkup : '', baby_birth_reg : '', baby_birth_cert : '', baby_immunization_since_birth : '', baby_birth_reg_day : '', baby_immunization_card_avail : '', baby_next_immun_schedule_date : '', baby_vitamin_a_sup : ''};
+  user = { name: '', age: '', address: '', landmark: '', phone: '', m_status: '', husband_name: '', husband_phone: '', religion: '', religion_denomination: '', menstral_period: '', first_pregnancy: '', last_child_age: '', antenatal_during_last_pregnancy: '', last_child_dlvry_location: '', antenatal_reg_for_pregnancy: '', antenatal_reg_facility: '', antenantal_reg_facility_others:'',antenatal_reg_next_schedule : '', antenatal_reg_why : '', fam_form_before : '', baby_birthday : '', baby_delivery_loctn : '', baby_post_natal_checkup : '', baby_birth_reg : '', baby_birth_cert : '', baby_immunization_since_birth : '', baby_birth_reg_day : '', baby_immunization_card_avail : '', baby_next_immun_schedule_date : '', baby_vitamin_a_sup : ''};
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     private sqlite: SQLite, public restProvider: RestProvider, public alertCtrl: AlertController,
-    private toast: Toast, private toasts: ToastController, private network: Network) {
-    this.restProvider.getData();
-    this.restProvider.filterData(this.msg);
+    private toast: Toast, private toasts: ToastController, private network: Network,
+    private auth: AuthService) {
+    let info = this.auth.getUserInfo();
+    this.user_id = info['id'];
     this.items = [
        {
          LGA: " KOLOKUMA/OPOKUMA LGA",
@@ -1830,7 +1832,7 @@ export class AddDataPage {
          NAME_OF_HEALTH_FACILITY: "Zarama Primary Health Centre",
          TYPE_OF_FACILITY: "Primary Health Centre"
        }
-     ]
+    ]
 }
 
   saveUser() {
@@ -1851,7 +1853,11 @@ export class AddDataPage {
               name: 'ionicdb.db',
               location: 'default'
             }).then((db: SQLiteObject) => {
-              db.executeSql('INSERT INTO data_records VALUES(NULL,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [this.user.name, this.user.age, this.user.address, this.user.landmark, this.user.phone, this.user.m_status, this.user.husband_name, this.user.husband_phone, this.user.religion, this.user.religion_denomination, this.user.menstral_period, this.user.first_pregnancy, this.user.last_child_age, this.user.antenatal_during_last_pregnancy, this.user.last_child_dlvry_location, this.user.antenatal_reg_for_pregnancy, this.user.antenatal_reg_facility, this.user.antenatal_reg_next_schedule, this.user.antenatal_reg_why, this.user.fam_form_before, this.user.baby_birthday, this.user.baby_delivery_loctn, this.user.baby_post_natal_checkup, this.user.baby_birth_reg, this.user.baby_birth_cert, this.user.baby_immunization_since_birth, this.user.baby_birth_reg_day, this.user.baby_immunization_card_avail, this.user.baby_next_immun_schedule_date, this.user.baby_vitamin_a_sup, 0])
+              if (this.user.antenatal_reg_facility == "Others"){
+                this.user.antenatal_reg_facility = this.user.antenantal_reg_facility_others;
+                console.log(this.user.antenatal_reg_facility);
+              }
+              db.executeSql('INSERT INTO data_records VALUES(NULL,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [this.user_id,this.user.name, this.user.age, this.user.address, this.user.landmark, this.user.phone, this.user.m_status, this.user.husband_name, this.user.husband_phone, this.user.religion, this.user.religion_denomination, this.user.menstral_period, this.user.first_pregnancy, this.user.last_child_age, this.user.antenatal_during_last_pregnancy, this.user.last_child_dlvry_location, this.user.antenatal_reg_for_pregnancy, this.user.antenatal_reg_facility, this.user.antenatal_reg_next_schedule, this.user.antenatal_reg_why, this.user.fam_form_before, this.user.baby_birthday, this.user.baby_delivery_loctn, this.user.baby_post_natal_checkup, this.user.baby_birth_reg, this.user.baby_birth_cert, this.user.baby_immunization_since_birth, this.user.baby_birth_reg_day, this.user.baby_immunization_card_avail, this.user.baby_next_immun_schedule_date, this.user.baby_vitamin_a_sup, 0])
                 .then(res => {
                   console.log(res);
                   this.restProvider.getData();

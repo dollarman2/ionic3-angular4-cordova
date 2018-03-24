@@ -16,30 +16,25 @@
         <ion-col></ion-col>
     </ion-row>
     <div class="login-box">
-        <ion-list inset>
+        <form (ngSubmit)="signInUser()">
+            <ion-list inset>
 
-            <ion-item>
-                <ion-label stacked>Email</ion-label>
-                <ion-input type="text" name="email" [(ngModel)]="registerCredentials.email"></ion-input>
-            </ion-item>
+                <ion-item>
+                    <ion-label stacked>Email</ion-label>
+                    <ion-input type="text" id="email" name="email" [(ngModel)]="registerCredentials.email" required></ion-input>
+                </ion-item>
 
-            <ion-item>
-                <ion-label stacked>Password</ion-label>
-                <ion-input type="password" name="password" [(ngModel)]="registerCredentials.password"></ion-input>
-            </ion-item>
+                <ion-item>
+                    <ion-label stacked>Password</ion-label>
+                    <ion-input type="password" id="password" name="password" [(ngModel)]="registerCredentials.password" required></ion-input>
+                </ion-item>
 
-        </ion-list>
-        <ion-row>
-            <ion-col class="signup-col">
-                <button ion-button class="submit-btn" full (click)="signInUser()">Login</button>
-            </ion-col>
-        </ion-row>
-
+            </ion-list>
+            <ion-row>
+                <ion-col class="signup-col">
+                    <button ion-button type="submit" class="submit-btn" full>Login</button>
+                </ion-col>
+            </ion-row>
+        </form>
     </div>
-    <!--button color="nav" block ion-button (click)="Register()" icon-left>
-  		<ion-icon name="home"></ion-icon>Register
-  	</button
-      <div padding>
-            <button color="submain" block ion-button>Sign In</button>
-        </div>-->
 </ion-content>

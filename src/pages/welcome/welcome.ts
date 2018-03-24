@@ -73,13 +73,12 @@ export class WelcomePage {
                       .then(res => {                        
                         console.log(res);
                     }).catch(e => {
-                        //this.showPopup("Error", e);
                         console.log(e);
                     });
                   }
                 });
             }
-          }, (err) => {
+          }, (err) => {            
             console.log(err);
           });
         })
@@ -100,15 +99,16 @@ export class WelcomePage {
   }
   showLoading() {
     this.loading = this.loadingCtrl.create({
-      content: 'Please wait...',
+      content: 'Loading please wait...',
       dismissOnPageChange: true
     });
     this.loading.present();
-  }
+    // setTimeout(() => {
+    //   this.loading.dismiss();
+    // }, 5000);
+  } 
 
   showError(text) {
-    this.loading.dismiss();
-
     let alert = this.alertCtrl.create({
       title: 'Fail',
       subTitle: text,
@@ -119,21 +119,22 @@ export class WelcomePage {
 
 
   signInUser() {
-    this.showLoading();
     this.auth.login(this.registerCredentials).subscribe(allowed => {
       if (allowed) {
+        this.showLoading();
         this.toast.create({
           message: ` Your login was successful!`,
           duration: 5000
         }).present();
         this.navCtrl.setRoot(DashboardPage);
       } else {
-        this.showError("Access Denied");
+        this.showError("Access Deneid");  
       }
     },
-      error => {
-        this.showError(error);
+      error => {        
+        this.showError("Access Deneid");        
       });    
+    
   }
 
 
@@ -145,7 +146,7 @@ export class WelcomePage {
       db.executeSql('CREATE TABLE IF NOT EXISTS users(rowid INTEGER PRIMARY KEY AUTOINCREMENT,name VARCHAR, email VARCHAR, password VARCHAR, logincount INT)', {})
         .then(res => console.log('Executed SQL'))
         .catch(e => console.log(e));
-      db.executeSql('CREATE TABLE IF NOT EXISTS data_records(rowid INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT DEFAULT NULL, age TEXT DEFAULT NULL, address TEXT DEFAULT NULL, landmark TEXT DEFAULT NULL,phone TEXT DEFAULT NULL, m_status TEXT DEFAULT NULL,husband_name TEXT DEFAULT NULL,husband_phone TEXT DEFAULT NULL,religion TEXT DEFAULT NULL,religion_denomination TEXT DEFAULT NULL,menstral_period TEXT DEFAULT NULL,first_pregnancy TEXT DEFAULT NULL,last_child_age TEXT DEFAULT NULL,antenatal_during_last_pregnancy TEXT DEFAULT NULL,last_child_dlvry_location TEXT DEFAULT NULL,antenatal_reg_for_pregnancy TEXT DEFAULT NULL,antenatal_reg_facility TEXT DEFAULT NULL,antenatal_reg_next_schedule TEXT DEFAULT NULL,antenatal_reg_why TEXT DEFAULT NULL,fam_form_before TEXT DEFAULT NULL, baby_birthday TEXT DEFAULT NULL,baby_delivery_loctn TEXT DEFAULT NULL,baby_post_natal_checkup TEXT DEFAULT NULL,baby_birth_reg TEXT DEFAULT NULL,baby_birth_cert TEXT DEFAULT NULL,baby_immunization_since_birth TEXT DEFAULT NULL,baby_birth_reg_day TEXT DEFAULT NULL,baby_immunization_card_avail TEXT DEFAULT NULL,baby_next_immun_schedule_date TEXT DEFAULT NULL,baby_vitamin_a_sup TEXT DEFAULT NULL,status INTEGER DEFAULT 0)', {})
+      db.executeSql('CREATE TABLE IF NOT EXISTS data_records(rowid INTEGER PRIMARY KEY AUTOINCREMENT,user_id INTEGER DEFAULT 0,name TEXT DEFAULT NULL, age TEXT DEFAULT NULL, address TEXT DEFAULT NULL, landmark TEXT DEFAULT NULL,phone TEXT DEFAULT NULL, m_status TEXT DEFAULT NULL,husband_name TEXT DEFAULT NULL,husband_phone TEXT DEFAULT NULL,religion TEXT DEFAULT NULL,religion_denomination TEXT DEFAULT NULL,menstral_period TEXT DEFAULT NULL,first_pregnancy TEXT DEFAULT NULL,last_child_age TEXT DEFAULT NULL,antenatal_during_last_pregnancy TEXT DEFAULT NULL,last_child_dlvry_location TEXT DEFAULT NULL,antenatal_reg_for_pregnancy TEXT DEFAULT NULL,antenatal_reg_facility TEXT DEFAULT NULL,antenatal_reg_next_schedule TEXT DEFAULT NULL,antenatal_reg_why TEXT DEFAULT NULL,fam_form_before TEXT DEFAULT NULL, baby_birthday TEXT DEFAULT NULL,baby_delivery_loctn TEXT DEFAULT NULL,baby_post_natal_checkup TEXT DEFAULT NULL,baby_birth_reg TEXT DEFAULT NULL,baby_birth_cert TEXT DEFAULT NULL,baby_immunization_since_birth TEXT DEFAULT NULL,baby_birth_reg_day TEXT DEFAULT NULL,baby_immunization_card_avail TEXT DEFAULT NULL,baby_next_immun_schedule_date TEXT DEFAULT NULL,baby_vitamin_a_sup TEXT DEFAULT NULL,status INTEGER DEFAULT 0)', {})
         .then(res => console.log('Executed SQL'))
         .catch(e => console.log(e));
       
@@ -162,9 +163,7 @@ export class WelcomePage {
     }).present();
   }
   
-  ionViewDidLoad() { 
-    this.getData();
-    this.addUser();
+  ionViewDidLoad() {
   }
 
   ionViewWillEnter() {

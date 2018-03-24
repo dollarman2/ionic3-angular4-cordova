@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
-import { AlertController,NavController, ToastController } from 'ionic-angular';
+import { AlertController, NavController, ToastController } from 'ionic-angular';
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
 import { Network } from '@ionic-native/network';
 import { Subscription } from 'rxjs/Subscription';
 import { FormControl } from '@angular/forms';
-import { AddDataPage } from '../add-data/add-data';
 import { EditDataPage } from '../edit-data/edit-data';
 import { RestProvider } from '../../providers/rest/rest';
 import { Toast } from '@ionic-native/toast';
@@ -32,9 +31,6 @@ export class HomePage {
     private sqlite: SQLite, public restProvider: RestProvider, private network: Network,
     public alertCtrl: AlertController) {
     this.searchControl = new FormControl();
-    this.getData();
-    this.SyncData();
-    this.UpdateData();
     }
 
   alert(message: string, title: string) {
@@ -44,6 +40,7 @@ export class HomePage {
       buttons: ['OK']
     }).present();
   }
+  
   displayNetworkUpdate(connectionState: string) {
     let networkType = this.network.type;
     this.toast.create({
@@ -54,7 +51,7 @@ export class HomePage {
   ionViewDidLoad() {
     this.getData();
     this.SyncData();
-    this.UpdateData();
+    this.UpdateData();    
     this.setFilteredItems();
     this.searchControl.valueChanges.debounceTime(700).subscribe(search => {
       this.searching = false;
@@ -111,6 +108,7 @@ export class HomePage {
             let data_id = res.rows.item(i).rowid;
             this.users = {
               id: res.rows.item(i).rowid,
+              user_id: res.rows.item(i).user_id,
               name: res.rows.item(i).name,
               age: res.rows.item(i).age,
               address: res.rows.item(i).address,
@@ -141,14 +139,21 @@ export class HomePage {
               baby_immunization_card_avail: res.rows.item(i).baby_immunization_card_avail,
               baby_next_immun_schedule_date: res.rows.item(i).baby_next_immun_schedule_date,
               baby_vitamin_a_sup: res.rows.item(i).baby_vitamin_a_sup,
-            }
-            this.restProvider.addRecords(this.users).then((result) => {
-              this.deleteData(data_id);
+            }                 
+            this.restProvider.addRecords(this.users).then((result) => { 
+              this.deleteData(data_id);               
             }, (err) => {
               console.log(err);
             });
-            
+            if (data_id != 0) {
+              this.toast.create({
+                message: `Data upload completed please wait while other records are retrieved.`,
+                duration: 1000
+              }).present();
+            }
           }
+          
+          
         })
         .catch(e => console.log(e));
         this.restProvider.getRecords().then((result: any) => {                   
@@ -156,6 +161,7 @@ export class HomePage {
             //let id = result[i].id;
             this.user = {
               id: result[i].id,
+              user_id: result[i].user_id,
               name: result[i].name,
               age: result[i].age,
               address: result[i].address,
@@ -187,29 +193,22 @@ export class HomePage {
               baby_next_immun_schedule_date: result[i].baby_next_immun_schedule_date,
               baby_vitamin_a_sup: result[i].baby_vitamin_a_sup,
             }; 
-            // db.executeSql('SELECT * FROM data_records WHERE rowid=?', [id])
-            //   .then(data => {
-            //     if (data.rows.length > 0) {
-            //     }else{
-            db.executeSql('INSERT INTO data_records VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [this.user.id, this.user.name, this.user.age, this.user.address, this.user.landmark, this.user.phone, this.user.m_status, this.user.husband_name, this.user.husband_phone, this.user.religion, this.user.religion_denomination, this.user.menstral_period, this.user.first_pregnancy, this.user.last_child_age, this.user.antenatal_during_last_pregnancy, this.user.last_child_dlvry_location, this.user.antenatal_reg_for_pregnancy, this.user.antenatal_reg_facility, this.user.antenatal_reg_next_schedule, this.user.antenatal_reg_why, this.user.fam_form_before, this.user.baby_birthday, this.user.baby_delivery_loctn, this.user.baby_post_natal_checkup, this.user.baby_birth_reg, this.user.baby_birth_cert, this.user.baby_immunization_since_birth, this.user.baby_birth_reg_day, this.user.baby_immunization_card_avail, this.user.baby_next_immun_schedule_date, this.user.baby_vitamin_a_sup, 1])
-                  .then(res => {
-                    this.toasts.show('Data saved', '5000', 'center').subscribe(
-                      toast => {
-                      }
-                    );
-                  }).catch(e => {
-                    //console.log(e);
-                  });                 
-              //   }
-              // });      
+            db.executeSql('INSERT INTO data_records VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [this.user.id, this.user.user_id, this.user.name, this.user.age, this.user.address, this.user.landmark, this.user.phone, this.user.m_status, this.user.husband_name, this.user.husband_phone, this.user.religion, this.user.religion_denomination, this.user.menstral_period, this.user.first_pregnancy, this.user.last_child_age, this.user.antenatal_during_last_pregnancy, this.user.last_child_dlvry_location, this.user.antenatal_reg_for_pregnancy, this.user.antenatal_reg_facility, this.user.antenatal_reg_next_schedule, this.user.antenatal_reg_why, this.user.fam_form_before, this.user.baby_birthday, this.user.baby_delivery_loctn, this.user.baby_post_natal_checkup, this.user.baby_birth_reg, this.user.baby_birth_cert, this.user.baby_immunization_since_birth, this.user.baby_birth_reg_day, this.user.baby_immunization_card_avail, this.user.baby_next_immun_schedule_date, this.user.baby_vitamin_a_sup, 1])
+            .then(res => {
+              this.toasts.show('Data saved', '5000', 'center').subscribe(
+                toast => {
+                }
+              );
+            }).catch(e => {
+              //console.log(e);
+            });    
           } 
           this.setFilteredItems();               
         }, (err) => {
           console.log(err);
         });
-        
     }).catch(e => console.log(e));
-
+    
   }
 
   UpdateData() {
@@ -272,11 +271,7 @@ export class HomePage {
         })
         .catch(e => console.log(e));
     }).catch(e => console.log(e));
-  }
-
-  addData() {
-    this.navCtrl.push(AddDataPage);
-  }
+  } 
 
   editData(rowid) {
     this.navCtrl.push(EditDataPage, {
@@ -292,7 +287,7 @@ export class HomePage {
       db.executeSql('DELETE FROM data_records WHERE rowid=?', [rowid])
       .then(res => {
         console.log(res);
-        this.getData();
+        this.restProvider.getData();
       })
       .catch(e => console.log(e));
     }).catch(e => console.log(e));

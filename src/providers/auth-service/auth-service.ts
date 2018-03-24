@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { AlertController } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
@@ -6,9 +7,11 @@ import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
 export class User {
   name: string;
   email: string;  
-  constructor(name: string, email: string) {
+  id;
+  constructor(name: string, email: string, id) {
     this.name = name;
     this.email = email;
+    this.id = id;
   }
 }
 
@@ -16,7 +19,19 @@ export class User {
 export class AuthService {
   currentUser: User;
   logincount;
-  constructor(private sqlite: SQLite) {
+  constructor(private sqlite: SQLite, public alertCtrl: AlertController,) {
+  }
+  showPopup(title, text) {
+    let alert = this.alertCtrl.create({
+      title: title,
+      subTitle: text,
+      buttons: [
+        {
+          text: 'OK',
+        }
+      ]
+    });
+    alert.present();
   }
   public login(credentials) {
     if (credentials.email === null || credentials.password === null) {
@@ -36,12 +51,17 @@ export class AuthService {
                   })
                   .catch(e => console.log(e));                
                 let access = (credentials.password === res.rows.item(0).password && credentials.email === res.rows.item(0).email);
-                this.currentUser = new User(res.rows.item(0).name, res.rows.item(0).email);
+                this.currentUser = new User(res.rows.item(0).name, res.rows.item(0).email, res.rows.item(0).rowid);
                 observer.next(access);
                 observer.complete();
-              } 
+              } else{
+                this.showPopup("Login Failed", "Please try again.");
+              }
             })
-            .catch(e => console.log(e));
+            .catch(e => {
+              this.showPopup("Login Failed", "Please try again.");
+              console.log(e)
+            });
         }).catch(e => console.log(e));
         
       });
